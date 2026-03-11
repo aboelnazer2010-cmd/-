@@ -23,11 +23,10 @@ jobs:
       - name: Install Capacitor CLI & Core
         run: npm install @capacitor/core @capacitor/cli @capacitor/android
 
-      - name: Build Next.js (Static Export)
+      - name: Build Next.js
         run: npm run build
 
-      # هنا يكمن السحر: سنصنع ملف الإعدادات بأنفسنا لنتجاوز الأداة المزعجة
-      - name: Create Capacitor Config Manually
+      - name: Create Capacitor Config
         run: |
           echo '{ "appId": "com.aboelnazer.app", "appName": "ShareAboElnazer", "webDir": "out", "bundledWebRuntime": false }' > capacitor.config.json
 
@@ -35,6 +34,20 @@ jobs:
         run: |
           npx cap add android
           npx cap sync android
+
+      - name: Grant Execute Permission
+        working-directory: ./android
+        run: chmod +x gradlew
+
+      - name: Build APK
+        working-directory: ./android
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Share-AboElnazer-App
+          path: android/app/build/outputs/apk/debug/app-debug.apk          npx cap sync android
 
       - name: Grant Execute Permission for Gradlew
         working-directory: ./android
