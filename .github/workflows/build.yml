@@ -17,6 +17,13 @@ jobs:
         with:
           node-version: '18'
 
+      # السحر الجديد: إجبار السيرفر على استخدام Java 17 المتوافق مع الأندرويد
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
       - name: Install Dependencies
         run: npm install
 
